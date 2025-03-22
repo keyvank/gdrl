@@ -48,8 +48,9 @@ def trajectory(policy, eps=0):
 
 
 Q = {i: {act: 0.0 for act in [LEFT, RIGHT]} for i in range(9)}
+pi_track = []
 eps = 0.1
-for ep in range(5000):
+for ep in range(10):
     visited = set()
     traj = trajectory(policy, eps)
     for i, (prev, act, nxt, rew) in enumerate(traj):
@@ -62,4 +63,14 @@ for ep in range(5000):
             Q[prev][act] += alpha * (discounted_reward - Q[prev][act])
             visited.add((prev, act))
 
-print(Q)
+    pi = {}
+    for i in range(9):
+        if Q[i][LEFT] > Q[i][RIGHT]:
+            pi[i] = LEFT
+        else:
+            pi[i] = RIGHT
+    pi_track.append(pi)
+
+import pprint
+
+pprint.pprint(pi_track)
